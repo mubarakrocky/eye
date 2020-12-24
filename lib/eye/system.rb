@@ -84,8 +84,8 @@ module Eye::System
       status = 0
 
       Timeout.timeout(timeout) do
-        _, st = Process.waitpid2(pid)
-        status = st.exitstatus || st.termsig
+        _, st = Process.waitpid2(pid, Process::WNOHANG)
+        status = st ? st.exitstatus || st.termsig : nil
       end
 
       { pid: pid, exitstatus: status }
